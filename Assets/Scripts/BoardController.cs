@@ -45,7 +45,7 @@ public class BoardController : MonoBehaviour
         //Turn the board, used for testing.
         // Turn();
         // Debug.Log("Flipped?:" + flipped);
-        // Debug.Log("Grounded?:" + IsGrounded());
+        Debug.Log("Grounded?:" + IsGrounded());
         // Debug.Log(transform.up.y);
     }
 

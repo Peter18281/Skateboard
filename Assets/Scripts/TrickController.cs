@@ -27,7 +27,7 @@ public class TrickController : MonoBehaviour
         controls.Gameplay.Enable();
         gyro = GetComponent<GyroInput>();
         
-        //Gather our Game Objects. Set angular velocity.
+        //Gather our Game Objects. Set maximum angular velocity.
         rb = GetComponent<Rigidbody>();
         rb.maxAngularVelocity = 15;
         bc = GetComponent<BoardController>();
@@ -72,11 +72,11 @@ public class TrickController : MonoBehaviour
         // }
         
         //Gyro braking and turning.
-        if(gyro.finalRot.z < -0.001){
-            bc.TurnRight();
-        }
-        else if(gyro.finalRot.z > 0.001){
+        if(gyro.finalRot.eulerAngles.z > 0.3 && gyro.finalRot.eulerAngles.z < 1){
             bc.TurnLeft();
+        }
+        else if(gyro.finalRot.eulerAngles.z > 359 && gyro.finalRot.eulerAngles.z < 359.7){
+            bc.TurnRight();
         }
         if(gyro.finalRot.x < -0.001){
             bc.Brake();

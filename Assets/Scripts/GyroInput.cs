@@ -89,6 +89,7 @@ sealed class GyroInput : MonoBehaviour
 
         // Update
         finalRot = comp * rot;
+        Debug.Log(finalRot.eulerAngles);
     }
 
     #endregion
