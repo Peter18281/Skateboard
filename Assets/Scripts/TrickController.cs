@@ -10,11 +10,17 @@ public class TrickController : MonoBehaviour
     private Transform rFoot;
     private Transform lFoot;
     private BoardController bc;
+    private SoundController sc;
     private CinemachineVirtualCamera skateCam;
     private TrickControls controls;
     private GyroInput gyro;
     private Transform spawnPoint;
     private UI ui;
+    private bool popped;
+    private bool kicked;
+    private bool heeled;
+    private bool shuved;
+    private bool lifted;
 
     private float pushSpeed = 2.0f;
 
@@ -31,6 +37,7 @@ public class TrickController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         rb.maxAngularVelocity = 15;
         bc = GetComponent<BoardController>();
+        sc = GetComponent<SoundController>();
         ui = GameObject.Find("Canvas").GetComponent<UI>();
         spawnPoint = GameObject.Find("Spawnpoint").GetComponent<Transform>();
         rb.transform.position = spawnPoint.transform.position;
@@ -86,21 +93,33 @@ public class TrickController : MonoBehaviour
         if(pushing == true && bc.IsGrounded() && !bc.flipped){
         rb.AddRelativeForce(0, 0, 1 * pushSpeed);
         }
+
+        if(bc.IsGrounded()){
+            popped = false;
+            kicked = false;
+            heeled = false;
+            shuved = false;
+            lifted = false;
+        }
     }
     
     //Forces of the tricks, broken down into their individual movements.
     //Forces are applied where the feet would be and are relative to the board.
     private void Pop(){
-        if(bc.IsGrounded()){
+        if(bc.IsGrounded() && !popped){
       Vector3 upForce = new Vector3(0,8,0);
       rb.AddForceAtPosition(upForce, lFoot.position,ForceMode.Impulse);
+      Invoke("Slide",1f);
+      popped = true;
+      sc.PopSound();
         }
     }
 
     private void Lift(){
-        if(!bc.IsGrounded()){
+        if(!bc.IsGrounded() && !lifted){
       Vector3 upForce = new Vector3(0,4,0);
       rb.AddForceAtPosition(upForce, rFoot.position,ForceMode.Impulse);
+      lifted = true;
         }
     }
 
@@ -112,23 +131,26 @@ public class TrickController : MonoBehaviour
     }
 
     private void Kick(){
-        if(!bc.IsGrounded()){
+        if(!bc.IsGrounded() && !kicked){
         Vector3 force = new Vector3(0,0,1f);
         rb.AddRelativeTorque(force, ForceMode.Impulse);
+        kicked = true;
         }
     }
 
     private void Heel(){
-        if(!bc.IsGrounded()){
+        if(!bc.IsGrounded() && !heeled){
         Vector3 force = new Vector3(0,0,-1f);
         rb.AddRelativeTorque(force, ForceMode.Impulse);
+        heeled = true;
             }    
         }
 
     private void Shuvit(){
-        if(!bc.IsGrounded()){
+        if(!bc.IsGrounded() && !shuved){
         Vector3 force = new Vector3(0,0,6);
         rb.AddForceAtPosition(force, rFoot.position,ForceMode.Impulse);
+        shuved = true;
         }
     }
 
@@ -186,5 +208,6 @@ public class TrickController : MonoBehaviour
 
     public void Reset(){
         rb.transform.position = spawnPoint.transform.position;
+        rb.transform.rotation = spawnPoint.transform.rotation;
     }
 }

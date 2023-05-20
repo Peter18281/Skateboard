@@ -4,10 +4,13 @@ using UnityEngine;
 
 public class SoundController : MonoBehaviour
 {
-    AudioSource audioSource;
+    public AudioSource audioSource;
     BoardController bc;
+    public AudioClip push;
     private Rigidbody rb;
     private bool rolling = false;
+    public AudioClip pop;
+    public AudioClip land;
 
     void Start(){
         //Get our Game Objects.
@@ -19,7 +22,9 @@ public class SoundController : MonoBehaviour
     void Update(){
         Rolling();
         if(rolling){
-            audioSource.Play(0);
+            if(!audioSource.isPlaying){
+            audioSource.PlayOneShot(push);
+            }
         }
     }
     
@@ -32,5 +37,9 @@ public class SoundController : MonoBehaviour
         rolling = false;
         audioSource.Stop();
        }
+    }
+
+    public void PopSound(){
+        audioSource.PlayOneShot(pop);
     }
 }

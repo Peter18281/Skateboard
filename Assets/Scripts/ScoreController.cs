@@ -76,6 +76,7 @@ public class ScoreController : MonoBehaviour
         score += currentTrick;
         ui.success.text = "SUCCESS!";
         Invoke("ClearSuccess", 1f);
+        Invoke("ResetTrick", 0.5f);
         }
     }
 

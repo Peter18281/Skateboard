@@ -45,14 +45,16 @@ public class BoardController : MonoBehaviour
         //Turn the board, used for testing.
         // Turn();
         // Debug.Log("Flipped?:" + flipped);
-        Debug.Log("Grounded?:" + IsGrounded());
+        // Debug.Log("Grounded?:" + IsGrounded());
         // Debug.Log(transform.up.y);
     }
 
     //Set the y rotation of the board to 0 to flip it back on its wheels.
     public void Flip(){
+        if(flipped){
         transform.rotation = new Quaternion(0,transform.rotation.x,0,transform.rotation.z);
         flipped = false;
+        }
     }
     
     //Input processing used for testing.

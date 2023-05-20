@@ -79,7 +79,7 @@ public class UI : MonoBehaviour
            airScore.text = "Air Time: " + sc.currentAir/5;
         }
         else{
-            airScore.text = "";
+            airScore.text = null;
         }
     }
 
@@ -89,7 +89,7 @@ public class UI : MonoBehaviour
             shuvScore.text = "Shuvin: " + sc.currentShuvit/5;
         }
         else{
-            shuvScore.text = "";
+            shuvScore.text = null;
         }
     }
 
@@ -99,7 +99,7 @@ public class UI : MonoBehaviour
             flipScore.text = "Flippin: " + sc.currentFlip/5;
         }
         else{
-            flipScore.text = "";
+            flipScore.text = null;
         }
     }
 
@@ -109,7 +109,7 @@ public class UI : MonoBehaviour
          multiplier.text = sc.multiplier + "x";
         }
         else{
-            multiplier.text = "";
+            multiplier.text = null;
         }
     }
 
@@ -119,7 +119,7 @@ public class UI : MonoBehaviour
             trickScore.text = "Trick Total: " + sc.currentTrick/5;
         }
         else{
-            trickScore.text = "";
+            trickScore.text = null;
         }
     }
 
