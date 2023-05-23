@@ -49,7 +49,7 @@ public class UI : MonoBehaviour
     void Update()
     {
         //If we're in practice, show practice, if not show the timer.
-        if(!sc.practice){
+        if(!sc.practice && (Mathf.FloorToInt(sc.timer/60f)+1) != 0){
            timer.text = "" + Mathf.FloorToInt(sc.timer/60f) + ":" + (Mathf.FloorToInt(sc.timer)/(Mathf.FloorToInt(sc.timer/60f)+1));
         }
         else{
@@ -64,13 +64,9 @@ public class UI : MonoBehaviour
         Score();
         
         //Increment end score display to real score then stop.
-        if(displayScore < sc.score/5){
-            displayScore++;
-            score.text = "" + displayScore;
-        }
+        score.text = "" + sc.score;
 
         MoveTut();
-        Debug.Log(Time.timeScale);
     }
 
     void AirScore(){
