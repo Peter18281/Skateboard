@@ -14,20 +14,25 @@ public class UI : MonoBehaviour
     TMP_Text flipScore;
     TMP_Text multiplier;
     TMP_Text timer;
+    TMP_Text flipOver;
     GameObject Tutorial;
     GameObject Pause;
     Transform endPos;
     bool paused;
     public TMP_Text success;
-    int displayScore = 0;
 
     ScoreController sc;
+    TrickController tc;
+    BoardController bc;
 
     void Start()
     {
         //Get our Game Objects.
         sc = GameObject.Find("Board").GetComponent<ScoreController>();
+        tc = GameObject.Find("Board").GetComponent<TrickController>();
+        bc = GameObject.Find("Board").GetComponent<BoardController>();
         trickScore = GameObject.Find("TrickScore").GetComponent<TMP_Text>();
+        flipOver = GameObject.Find("FlipOver").GetComponent<TMP_Text>();
         airScore = GameObject.Find("AirScore").GetComponent<TMP_Text>();
         shuvScore = GameObject.Find("ShuvScore").GetComponent<TMP_Text>();
         flipScore = GameObject.Find("FlipScore").GetComponent<TMP_Text>();
@@ -41,6 +46,7 @@ public class UI : MonoBehaviour
         endPos = GameObject.Find("EndPos").GetComponent<Transform>();
         
         //Disable/Enable parts of the UI.
+        tc.Disable();
         Tutorial.SetActive(true);
         finalScore.gameObject.SetActive(false);
         Pause.SetActive(false);
@@ -55,6 +61,8 @@ public class UI : MonoBehaviour
         else{
            timer.text = "Practice";
         } 
+
+        Flipped();
         
         //Increment scores when conditions are met.
         AirScore();
@@ -129,7 +137,7 @@ public class UI : MonoBehaviour
         success.gameObject.SetActive(false);
         multiplier.gameObject.SetActive(false);
         timer.gameObject.SetActive(false);
-        Time.timeScale = 0f;
+        tc.Disable();
     }
 
     public void Retry(){
@@ -144,6 +152,7 @@ public class UI : MonoBehaviour
 
     public void EndTut(){
         //Close the Tutorial.
+        tc.Enable();
         Tutorial.SetActive(false);
     }
 
@@ -171,5 +180,14 @@ public class UI : MonoBehaviour
 
     public void StartTime(){
         sc.start = true;
+    }
+
+    public void Flipped(){
+        if(bc.IsGrounded() && bc.flipped){
+         flipOver.gameObject.SetActive(true);
+        }
+        else{
+            flipOver.gameObject.SetActive(false);
+        }
     }
 }

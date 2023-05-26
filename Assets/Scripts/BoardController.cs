@@ -65,7 +65,8 @@ public class BoardController : MonoBehaviour
     
     // Check for a raycast hit when casting down from the trucks to check if the board is grounded.
     public bool IsGrounded(){
-      return Physics.Raycast(truck1.position, -Vector3.up, groundDist + 0.1f) || Physics.Raycast(truck2.position, -Vector3.up, groundDist + 0.1f);
+        // Debug.Log("Grounded: " + (Physics.Raycast(truck1.position, -Vector3.up, groundDist + 0.15f) || Physics.Raycast(truck2.position, -Vector3.up, groundDist + 0.15f)));
+      return Physics.Raycast(truck1.position, -Vector3.up, groundDist + 0.15f) || Physics.Raycast(truck2.position, -Vector3.up, groundDist + 0.15f);
     }
     
     //Push the board.
@@ -88,21 +89,27 @@ public class BoardController : MonoBehaviour
     //Rotate the player, used for testing.
     private void Turn(){
         if(IsGrounded() && !flipped){
-        rb.transform.Rotate(0,Input.GetAxisRaw("Horizontal")/20f,0);
+        rb.transform.Rotate(0,Input.GetAxisRaw("Horizontal")/10f,0);
         }
     }
     
     //Turn the player to the right.
     public void TurnRight(){
         if(IsGrounded() && !flipped){
-        rb.transform.Rotate(0,1/20f,0);
+            tc.trighting = true;
         }
     }
     
     //Turn the player to the left.
     public void TurnLeft(){
         if(IsGrounded() && !flipped){
-        rb.transform.Rotate(0,-1/20f,0);
+            tc.tlefting = true;
+        
         }
+    }
+
+    public void StopTurn(){
+        tc.tlefting = false;
+        tc.trighting = false;
     }
 }

@@ -34,8 +34,11 @@ public class ScoreController : MonoBehaviour
         if(start){
         timer -= Time.deltaTime;
         }
-        if(timer<=0 && !practice){
+        else if(timer<=0 && !practice){
             timerEnded();
+        }
+        else if(practice){
+            timer = 9999;
         }
 
         //Check the scores and add them to the current trick total.

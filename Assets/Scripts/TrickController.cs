@@ -21,6 +21,9 @@ public class TrickController : MonoBehaviour
     private bool heeled;
     private bool shuved;
     private bool lifted;
+    public bool tlefting = false;
+    public bool trighting = false;
+    public bool gyroenabled = true;
 
     private float pushSpeed = 2.0f;
 
@@ -32,6 +35,12 @@ public class TrickController : MonoBehaviour
         controls = new TrickControls();
         controls.Gameplay.Enable();
         gyro = GetComponent<GyroInput>();
+        if(PlayerPrefs.GetInt("gyro") == 1){
+            gyroenabled = true;
+        }
+        else{
+            gyroenabled = false;
+        }
         
         //Gather our Game Objects. Set maximum angular velocity.
         rb = GetComponent<Rigidbody>();
@@ -56,8 +65,10 @@ public class TrickController : MonoBehaviour
         controls.Gameplay.Push.canceled += ctx => bc.StopPushing();
         controls.Gameplay.Brake.performed += ctx => bc.Brake();
         controls.Gameplay.Reset.performed += ctx => Reset();
-        controls.Gameplay.TurnRight.performed += ctx => bc.TurnRight();
-        controls.Gameplay.TurnLeft.performed += ctx => bc.TurnLeft();
+        controls.Gameplay.TurnRight.started += ctx => bc.TurnRight();
+        controls.Gameplay.TurnRight.canceled += ctx => bc.StopTurn();
+        controls.Gameplay.TurnLeft.started += ctx => bc.TurnLeft();
+        controls.Gameplay.TurnLeft.canceled += ctx => bc.StopTurn();
         controls.Gameplay.Pause.performed += ctx => ui.PauseMenu();
     }
 
@@ -77,21 +88,37 @@ public class TrickController : MonoBehaviour
         // if(Input.GetKeyDown(KeyCode.Mouse0)){
         //     Land();
         // }
-        
+
         //Gyro braking and turning.
+        if(gyroenabled){
         if(gyro.finalRot.eulerAngles.z > 0.3 && gyro.finalRot.eulerAngles.z < 1){
             bc.TurnLeft();
         }
         else if(gyro.finalRot.eulerAngles.z > 359 && gyro.finalRot.eulerAngles.z < 359.7){
             bc.TurnRight();
         }
+        else if(gyro.finalRot.eulerAngles.z > 359.7 || gyro.finalRot.eulerAngles.z < 0.3){
+            bc.StopTurn();
+        }
         if(gyro.finalRot.x < -0.001){
             bc.Brake();
+        }
         }
 
         //Push the Board.
         if(pushing == true && bc.IsGrounded() && !bc.flipped){
-        rb.AddRelativeForce(0, 0, 1 * pushSpeed);
+            Debug.Log("adding force");
+        rb.AddRelativeForce(0, 0, 10 * pushSpeed);
+        }
+
+        if(tlefting){
+            Debug.Log("turning left");
+            rb.transform.Rotate(0,-1/5f,0);
+        }
+
+        if(trighting){
+            Debug.Log("turning right");
+            rb.transform.Rotate(0,1/5f,0);
         }
 
         if(bc.IsGrounded()){
@@ -209,5 +236,13 @@ public class TrickController : MonoBehaviour
     public void Reset(){
         rb.transform.position = spawnPoint.transform.position;
         rb.transform.rotation = spawnPoint.transform.rotation;
+    }
+
+    public void Disable(){
+        controls.Gameplay.Disable();
+    }
+
+    public void Enable(){
+        controls.Gameplay.Enable();
     }
 }
